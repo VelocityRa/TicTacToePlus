@@ -8,7 +8,7 @@ const auto HEIGHT = 600;
 const auto BG_COLOR = sf::Color(140, 70, 70);
 const auto LINE_COLOR = sf::Color(217, 100, 89);
 
-void drawBackground(sf::RenderWindow*);
+void drawLines(sf::RenderWindow*);
 
 int WinMain()
 {
@@ -29,7 +29,7 @@ int WinMain()
 
 		window.clear(BG_COLOR);
 
-		drawBackground(&window); // Draw lines
+		drawLines(&window); // Draw lines comprising the board
 		board.drawCells(&window); // Draw X's and O's
 
 		window.display();
@@ -40,7 +40,7 @@ int WinMain()
 
 //Draw the lines comprising the Tic Tac Toe board
 //TODO: Possibly make board prettier by implementing rounded lines
-void drawBackground(sf::RenderWindow* window)
+void drawLines(sf::RenderWindow* window)
 {
 	auto lineWidth = 5;
 	auto padding = 30;
