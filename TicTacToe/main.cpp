@@ -8,15 +8,19 @@ const auto HEIGHT = 600;
 const auto BG_COLOR = sf::Color(140, 70, 70);
 const auto LINE_COLOR = sf::Color(217, 100, 89);
 
-void drawLines(sf::RenderWindow*);
+//Board padding in pixels
+const auto padding = 30;
+
+static void drawLines(sf::RenderWindow*);
 
 int WinMain()
 {
 
 	sf::RenderWindow window(sf::VideoMode(WIDTH, HEIGHT), "Tic Tac Toe",
 			 sf::Style::Titlebar | sf::Style::Close);
+	window.setFramerateLimit(60);
 
-	TTTBoard board;
+	TTTBoard board(WIDTH, HEIGHT, padding);
 
 	while (window.isOpen())
 	{
@@ -30,7 +34,7 @@ int WinMain()
 		window.clear(BG_COLOR);
 
 		drawLines(&window); // Draw lines comprising the board
-		board.drawCells(&window); // Draw X's and O's
+		board.drawBoard(&window); // Draw X's and O's
 
 		window.display();
 	}
@@ -39,13 +43,13 @@ int WinMain()
 }
 
 //Draw the lines comprising the Tic Tac Toe board
-//TODO: Possibly make board prettier by implementing rounded lines
-void drawLines(sf::RenderWindow* window)
+static void drawLines(sf::RenderWindow* window)
 {
-	auto lineWidth = 5;
-	auto padding = 30;
+	auto lineWidth = 10;
+
 	sf::RectangleShape line(sf::Vector2f(lineWidth, HEIGHT - padding * 2));
 	line.setFillColor(LINE_COLOR);
+
 	for (auto i = 1; i < 3; i++)
 	{
 		line.setPosition(WIDTH / 3 * i, padding);
@@ -55,6 +59,7 @@ void drawLines(sf::RenderWindow* window)
 	for (auto i = 1; i < 3; i++)
 	{
 		line.setPosition( padding, HEIGHT / 3 * i);
+
 		window->draw(line);
 	}
 }
