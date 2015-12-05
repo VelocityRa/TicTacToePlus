@@ -10,7 +10,6 @@ TTTBoard::TTTBoard(int boardWidth, int boardHeight, int padding)
 	shape_X.setOrigin(shape_X.getSize() / static_cast<float>(2));
 	shape_X.setFillColor(X_COLOR);
 
-
 	shape_O.setRadius(cellHeight/2.0 - padding - item_width);
 	shape_O.setPointCount(64);
 	shape_O.setOrigin(sf::Vector2f(shape_O.getRadius(), shape_O.getRadius()));
@@ -19,10 +18,6 @@ TTTBoard::TTTBoard(int boardWidth, int boardHeight, int padding)
 	shape_O.setFillColor(sf::Color::Transparent);
 
 	clearBoard();
-
-	//For debugging
-	this->setCell(0, 0, Cell::X);
-	//this->setCell(2, 2, Cell::O);
 }
 
 
@@ -66,6 +61,6 @@ void TTTBoard::drawBoard(sf::RenderWindow* window)
 void TTTBoard::clearBoard()
 {
 	for (auto i = 0; i < 9; i++)
-		cells[i % 3][i / 3] = { Cell::O };
+		cells[i % 3][i / 3] = { Cell::Empty };
 }
 
