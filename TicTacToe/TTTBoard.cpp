@@ -1,7 +1,10 @@
 #include "TTTBoard.h"
 
+//Set up some basic variables and shapes used for drawing
 TTTBoard::TTTBoard(int boardWidth, int boardHeight, int padding)
 {
+	currentCell = Cell::X;
+
 	this->padding = padding;
 	this->cellWidth = boardWidth / 3.0;
 	this->cellHeight = boardHeight / 3.0;
@@ -18,11 +21,6 @@ TTTBoard::TTTBoard(int boardWidth, int boardHeight, int padding)
 	shape_O.setFillColor(sf::Color::Transparent);
 
 	clearBoard();
-}
-
-
-TTTBoard::~TTTBoard()
-{
 }
 
 void TTTBoard::drawCell(sf::RenderWindow* window, unsigned int index)
@@ -46,12 +44,11 @@ void TTTBoard::drawCell(sf::RenderWindow* window, unsigned int index)
 	}
 }
 
-
 void TTTBoard::drawBoard(sf::RenderWindow* window)
 {
 	for (auto i = 0; i < 9; i++)
 	{
-		if (this->getCell(i) != Cell::Empty)
+		if (!this->isEmpty(i))
 		{
 			this->drawCell(window, i);
 		}
@@ -64,3 +61,34 @@ void TTTBoard::clearBoard()
 		cells[i % 3][i / 3] = { Cell::Empty };
 }
 
+void TTTBoard::processMouseInput(sf::Event::MouseButtonEvent* mouseEvent,
+		const int windowWidth, const int windowHeight)
+{
+	auto x = mouseEvent->x;
+	auto y = mouseEvent->y;
+
+	if (x < padding || x > windowWidth - padding
+		|| y < padding || y > windowHeight - padding)
+	{
+		// Player clicked out of the board
+		return;
+	}
+
+	//Input coords include padding so we should subtract it
+	x, y -= padding;
+
+	const unsigned int cellX = x / cellWidth;
+	const unsigned int cellY = y / cellHeight;
+
+	if (isEmpty(cellX, cellY))
+	{
+		this->setCell(cellX, cellY, currentCell);
+		this->nextMove();
+	}
+}
+
+void TTTBoard::nextMove()
+{
+	// Switch current player
+	currentCell = currentCell == Cell::X ? Cell::O : Cell::X;
+}
