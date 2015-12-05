@@ -1,6 +1,7 @@
 #include <SFML/Graphics.hpp>
 #include "TTTBoard.h"
 
+//Window resolution
 const auto WIDTH = 600;
 const auto HEIGHT = 600;
 
@@ -11,16 +12,27 @@ const auto LINE_COLOR = sf::Color(217, 100, 89);
 //Board padding in pixels
 const auto padding = 30;
 
-static void drawLines(sf::RenderWindow*);
+//Board width
+const auto bWIDTH = WIDTH - padding * 2;
+const auto bHEIGHT = HEIGHT - padding * 2;
+
+//Line width for board lines
+const auto lineWidth = 10;
+
+
+static void drawLines(sf::RenderWindow*, sf::RectangleShape* line);
 
 int WinMain()
 {
-
 	sf::RenderWindow window(sf::VideoMode(WIDTH, HEIGHT), "Tic Tac Toe",
 			 sf::Style::Titlebar | sf::Style::Close);
 	window.setFramerateLimit(60);
 
-	TTTBoard board(WIDTH, HEIGHT, padding);
+	TTTBoard board(bWIDTH, bHEIGHT, padding);
+
+	//Line(rectangle) shape used for drawing the board
+	sf::RectangleShape line(sf::Vector2f(lineWidth, bHEIGHT));
+	line.setFillColor(LINE_COLOR);
 
 	while (window.isOpen())
 	{
@@ -33,7 +45,7 @@ int WinMain()
 
 		window.clear(BG_COLOR);
 
-		drawLines(&window); // Draw lines comprising the board
+		drawLines(&window, &line); // Draw lines comprising the board
 		board.drawBoard(&window); // Draw X's and O's
 
 		window.display();
@@ -43,23 +55,20 @@ int WinMain()
 }
 
 //Draw the lines comprising the Tic Tac Toe board
-static void drawLines(sf::RenderWindow* window)
+static void drawLines(sf::RenderWindow* window, sf::RectangleShape* line)
 {
-	auto lineWidth = 10;
-
-	sf::RectangleShape line(sf::Vector2f(lineWidth, HEIGHT - padding * 2));
-	line.setFillColor(LINE_COLOR);
-
-	for (auto i = 1; i < 3; i++)
+	line->setSize(sf::Vector2f(lineWidth, bHEIGHT));
+	for (auto i = 1; i < 3; i++) //Horizontal lines
 	{
-		line.setPosition(WIDTH / 3 * i, padding);
-		window->draw(line);
+		line->setPosition(bWIDTH / 3 * i, 0);
+		line->move(padding - lineWidth/2, padding);
+		window->draw(*line);
 	}
-	line.setSize(sf::Vector2f(WIDTH - padding *2 , lineWidth));
-	for (auto i = 1; i < 3; i++)
+	line->setSize(sf::Vector2f(bWIDTH, lineWidth));
+	for (auto i = 1; i < 3; i++) //Vertical lines
 	{
-		line.setPosition( padding, HEIGHT / 3 * i);
-
-		window->draw(line);
+		line->setPosition(0, bHEIGHT / 3 * i);
+		line->move(padding, padding - lineWidth/2);
+		window->draw(*line);
 	}
 }
