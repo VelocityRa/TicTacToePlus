@@ -61,6 +61,7 @@ public:
 	void drawCell(sf::RenderWindow* window, unsigned int index);
 	void drawBoard(sf::RenderWindow* window);
 	void clearBoard();
+	bool isBoardFull();
 
 	void processMouseInput(sf::Event::MouseButtonEvent* mouseEvent,
 		const int windowWidth, const int windowHeight);

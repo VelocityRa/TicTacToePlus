@@ -61,6 +61,20 @@ void TTTBoard::clearBoard()
 		cells[i % 3][i / 3] = { Cell::Empty };
 }
 
+bool TTTBoard::isBoardFull()
+{
+	auto isFull = true;
+	for (auto i = 0; i < 9; i++)
+	{
+		if(isEmpty(i))
+		{
+			isFull = false;
+			break;
+		}
+	}
+	return isFull;
+}
+
 void TTTBoard::processMouseInput(sf::Event::MouseButtonEvent* mouseEvent,
 		const int windowWidth, const int windowHeight)
 {
@@ -91,4 +105,11 @@ void TTTBoard::nextMove()
 {
 	// Switch current player
 	currentCell = currentCell == Cell::X ? Cell::O : Cell::X;
+
+	// TODO: Add a win screen instead of instant board clear
+	// TODO: Add score
+	if (isBoardFull())
+	{
+		clearBoard();
+	}
 }
