@@ -5,4 +5,3 @@ Tic Tac Toe in C++ using SFML.
 * Basic function
 * Prettify (aiming for a minimalist skeek UI)
 * Implement unbeatable AI
-* 
