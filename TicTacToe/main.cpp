@@ -1,6 +1,5 @@
 #include <SFML/Graphics.hpp>
 #include "TTTBoard.h"
-#include <cassert>
 
 //Window resolution
 const auto WIDTH = 600;
@@ -13,12 +12,12 @@ const auto LINE_COLOR = sf::Color(217, 100, 89);
 //Board padding in pixels
 const auto padding = 30;
 
+//Line width for the board lines
+const auto lineWidth = WIDTH / 50;
+
 //Board width
 const auto bWIDTH = WIDTH - padding * 2;
 const auto bHEIGHT = HEIGHT - padding * 2;
-
-//Line width for board lines
-const auto lineWidth = 10;
 
 static void drawLines(sf::RenderWindow*, sf::RectangleShape* line);
 static void setupWinText(sf::Text* text, sf::Text* shadow);
@@ -33,9 +32,11 @@ int WinMain()
 
 	// Text stuff
 	sf::Font font;
-	assert(font.loadFromFile("../TicTacToe/resources/fonts/ONRAMP.ttf"), true);
-	sf::Text gameOverText("", font);
-	gameOverText.setCharacterSize(232);
+	if(!font.loadFromFile("../TicTacToe/resources/fonts/ONRAMP.ttf"))
+	{
+		return 1;
+	}
+	sf::Text gameOverText("", font, WIDTH/3);
 	auto GOshadow(gameOverText);
 
 	// Create the board
@@ -83,8 +84,9 @@ int WinMain()
 
 		drawLines(&window, &line); // Draw lines comprising the board
 		board.drawBoard(&window); // Draw X's and O's
-		window.draw(GOshadow);
-		window.draw(gameOverText);
+
+		window.draw(GOshadow);  // Draw game over text's shadow
+		window.draw(gameOverText); // Draw winning text (empty if game is in progress)
 
 		window.display();
 	}
