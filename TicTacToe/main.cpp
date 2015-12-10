@@ -58,9 +58,16 @@ int WinMain()
 				break;
 			case sf::Event::MouseButtonPressed:
 				if (event.mouseButton.button == sf::Mouse::Left)
+				{
 					if (board.isGamePlaying())
 					{
 						board.processMouseInput(&event.mouseButton);
+					}
+					else
+					{
+						gameOverText.setString("");
+						GOshadow.setString("");
+						board.resetGame();
 					}
 					auto gamestate = board.getGameState();
 					if (gamestate == TTTBoard::XWon) {
@@ -72,10 +79,8 @@ int WinMain()
 					else if (gamestate == TTTBoard::Draw) {
 						gameOverText.setString("DRAW");
 					}
-					else {
-						break;
-					}
 					setupWinText(&gameOverText, &GOshadow);
+				}
 				break;
 			}
 		}

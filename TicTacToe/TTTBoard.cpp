@@ -148,3 +148,9 @@ void TTTBoard::nextMove()
 
 	// TODO: Add score
 }
+
+void TTTBoard::resetGame()
+{
+	clearBoard();
+	gamestate = TTTBoard::Playing;
+}

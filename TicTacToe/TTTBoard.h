@@ -97,4 +97,6 @@ public:
 
 	void nextMove();
 
+	void resetGame();
+
 };
