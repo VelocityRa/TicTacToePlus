@@ -1,4 +1,4 @@
-# TicTacToe++
+# TicTacToe+
 Tic Tac Toe in C++ using SFML.
 
 ### Current Goals:
