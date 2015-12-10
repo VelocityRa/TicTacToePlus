@@ -16,6 +16,8 @@ private:
 	float cellWidth;
 	float cellHeight;
 	int padding;
+	float windowWidth;
+	float windowHeight;
 
 	enum class Cell
 	{
@@ -32,6 +34,14 @@ private:
 public:
 	TTTBoard(int boardWidth, int boardHeight, int padding);
 	~TTTBoard() {}
+
+	enum GameState
+	{
+		Playing,
+		XWon,
+		OWon,
+		Draw
+	} gamestate;
 
 	Cell getCell(unsigned int i)
 	{
@@ -58,13 +68,32 @@ public:
 		return getCell(i, j) == Cell::Empty;
 	}
 
+	GameState getGameState()
+	{
+		return gamestate;
+	}
+
 	void drawCell(sf::RenderWindow* window, unsigned int index);
 	void drawBoard(sf::RenderWindow* window);
 	void clearBoard();
 	bool isBoardFull();
 
-	void processMouseInput(sf::Event::MouseButtonEvent* mouseEvent,
-		const int windowWidth, const int windowHeight);
+	void processMouseInput(sf::Event::MouseButtonEvent* mouseEvent);
+
+	void setWinState(unsigned int i, unsigned int j)
+	{
+		gamestate = getCell(i, j) == Cell::X ? XWon : OWon;
+	}
+
+	void setDraw()
+	{
+		gamestate = Draw;
+	}
+
+	bool isGamePlaying() const
+	{
+		return gamestate == Playing;
+	}
 
 	void nextMove();
 

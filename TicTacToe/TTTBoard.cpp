@@ -8,6 +8,9 @@ TTTBoard::TTTBoard(int boardWidth, int boardHeight, int padding)
 	this->padding = padding;
 	this->cellWidth = boardWidth / 3.0;
 	this->cellHeight = boardHeight / 3.0;
+	this->windowWidth = cellWidth * 3 + padding * 2;
+	this->windowHeight = cellHeight * 3 + padding * 2;
+
 		
 	shape_X.setSize(sf::Vector2f(item_width, cellHeight - padding));
 	shape_X.setOrigin(shape_X.getSize() / static_cast<float>(2));
@@ -27,8 +30,8 @@ void TTTBoard::drawCell(sf::RenderWindow* window, unsigned int index)
 {
 	if (this->getCell(index) == Cell::X)
 	{
-		shape_X.setPosition(index % 3  * cellWidth + cellWidth/2 + padding,
-			index / 3 * cellHeight + cellHeight/2 + padding);
+		shape_X.setPosition(index % 3 * cellWidth + cellWidth / 2 + padding,
+							index / 3 * cellHeight + cellHeight / 2 + padding);
 
 		shape_X.setRotation(45);
 		window->draw(shape_X);
@@ -38,7 +41,7 @@ void TTTBoard::drawCell(sf::RenderWindow* window, unsigned int index)
 	else if (this->getCell(index) == Cell::O)
 	{
 		shape_O.setPosition(index % 3 * cellWidth + cellWidth / 2 + padding,
-			index / 3 * cellHeight + cellHeight / 2 + padding);
+							index / 3 * cellHeight + cellHeight / 2 + padding);
 
 		window->draw(shape_O);
 	}
@@ -75,8 +78,7 @@ bool TTTBoard::isBoardFull()
 	return isFull;
 }
 
-void TTTBoard::processMouseInput(sf::Event::MouseButtonEvent* mouseEvent,
-		const int windowWidth, const int windowHeight)
+void TTTBoard::processMouseInput(sf::Event::MouseButtonEvent* mouseEvent)
 {
 	auto x = mouseEvent->x;
 	auto y = mouseEvent->y;
@@ -106,10 +108,43 @@ void TTTBoard::nextMove()
 	// Switch current player
 	currentCell = currentCell == Cell::X ? Cell::O : Cell::X;
 
-	// TODO: Add a win screen instead of instant board clear
-	// TODO: Add score
-	if (isBoardFull())
+	// Check horizontal
+	for (auto row = 0; row < 3; row++)
 	{
-		clearBoard();
+		if (isEmpty(row * 3)) { continue; }
+		if (getCell(0, row) == getCell(1, row) &&
+			getCell(1, row) == getCell(2, row))
+		{
+			setWinState(0, row);
+		}
 	}
+
+	// Check vertical
+	for (auto col = 0; col < 3; col++)
+	{
+		if (isEmpty(col)) { continue; }
+		if (getCell(col, 0) == getCell(col, 1) &&
+			getCell(col, 1) == getCell(col, 2))
+		{
+			setWinState(col, 0);
+		}
+	}
+
+	// Check diagonals
+	if (getCell(0, 0) == getCell(1, 1) &&
+		getCell(1, 1) == getCell(2, 2) ||
+		getCell(2, 0) == getCell(1, 1) &&
+		getCell(1, 1) == getCell(0, 2))
+	{
+		if (!isEmpty(1, 1))
+			setWinState(1, 1);
+	}
+
+	// Check draw
+	if(isGamePlaying() && isBoardFull())
+	{
+		setDraw();
+	}
+
+	// TODO: Add score
 }

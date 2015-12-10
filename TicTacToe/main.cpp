@@ -1,5 +1,6 @@
 #include <SFML/Graphics.hpp>
 #include "TTTBoard.h"
+#include <cassert>
 
 //Window resolution
 const auto WIDTH = 600;
@@ -19,15 +20,25 @@ const auto bHEIGHT = HEIGHT - padding * 2;
 //Line width for board lines
 const auto lineWidth = 10;
 
-
 static void drawLines(sf::RenderWindow*, sf::RectangleShape* line);
+static void setupWinText(sf::Text* text, sf::Text* shadow);
 
 int WinMain()
 {
+	sf::ContextSettings settings;
+	settings.antialiasingLevel = 8;
 	sf::RenderWindow window(sf::VideoMode(WIDTH, HEIGHT), "Tic Tac Toe",
-			 sf::Style::Titlebar | sf::Style::Close);
+			 sf::Style::Titlebar | sf::Style::Close, settings);
 	window.setFramerateLimit(60);
 
+	// Text stuff
+	sf::Font font;
+	assert(font.loadFromFile("../TicTacToe/resources/fonts/ONRAMP.ttf"), true);
+	sf::Text gameOverText("", font);
+	gameOverText.setCharacterSize(232);
+	auto GOshadow(gameOverText);
+
+	// Create the board
 	TTTBoard board(bWIDTH, bHEIGHT, padding);
 
 	//Line(rectangle) shape used for drawing the board
@@ -46,7 +57,24 @@ int WinMain()
 				break;
 			case sf::Event::MouseButtonPressed:
 				if (event.mouseButton.button == sf::Mouse::Left)
-					board.processMouseInput(&event.mouseButton, WIDTH, HEIGHT);
+					if (board.isGamePlaying())
+					{
+						board.processMouseInput(&event.mouseButton);
+					}
+					auto gamestate = board.getGameState();
+					if (gamestate == TTTBoard::XWon) {
+						gameOverText.setString("X WON");
+					}
+					else if (gamestate == TTTBoard::OWon) {
+						gameOverText.setString("O WON");
+					}
+					else if (gamestate == TTTBoard::Draw) {
+						gameOverText.setString("DRAW");
+					}
+					else {
+						break;
+					}
+					setupWinText(&gameOverText, &GOshadow);
 				break;
 			}
 		}
@@ -55,6 +83,8 @@ int WinMain()
 
 		drawLines(&window, &line); // Draw lines comprising the board
 		board.drawBoard(&window); // Draw X's and O's
+		window.draw(GOshadow);
+		window.draw(gameOverText);
 
 		window.display();
 	}
@@ -79,4 +109,21 @@ static void drawLines(sf::RenderWindow* window, sf::RectangleShape* line)
 		line->move(padding, padding - lineWidth/2);
 		window->draw(*line);
 	}
+}
+
+static void setupWinText(sf::Text* text, sf::Text* shadow)
+{
+	// Position winning text to center and center align it
+	text->setPosition(0, 0);
+	text->setOrigin(0, 0);
+
+	auto textRect = text->getGlobalBounds();
+	text->setOrigin(textRect.left + textRect.width / 2.0f,
+		textRect.top + textRect.height / 2.0f);
+	text->setPosition(WIDTH / 2, HEIGHT / 2);
+
+	//Create its shadow and offset it
+	*shadow = *text;
+	shadow->move(10, -10);
+	shadow->setColor(sf::Color::Black);
 }
