@@ -72,13 +72,13 @@ public:
 		return gamestate;
 	}
 
-	void drawCell(sf::RenderWindow* window, unsigned int index);
-	void drawScoreboard(sf::RenderWindow* window) const;
-	void drawBoard(sf::RenderWindow* window);
+	void drawCell(sf::RenderWindow& window, unsigned int index);
+	void drawScoreboard(sf::RenderWindow& window) const;
+	void drawBoard(sf::RenderWindow& window);
 	void clearBoard();
 	bool isBoardFull();
 
-	void processMouseInput(sf::Event::MouseButtonEvent* mouseEvent);
+	void processMouseInput(sf::Event::MouseButtonEvent& mouseEvent);
 
 	void setWinState(unsigned int i, unsigned int j)
 	{

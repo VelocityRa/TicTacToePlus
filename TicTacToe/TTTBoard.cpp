@@ -26,7 +26,7 @@ TTTBoard::TTTBoard(int boardWidth, int boardHeight)
 	clearBoard();
 }
 
-void TTTBoard::drawCell(sf::RenderWindow* window, unsigned int index)
+void TTTBoard::drawCell(sf::RenderWindow& window, unsigned int index)
 {
 	if (this->getCell(index) == Cell::X)
 	{
@@ -34,27 +34,27 @@ void TTTBoard::drawCell(sf::RenderWindow* window, unsigned int index)
 							index / 3 * cellHeight + cellHeight / 2 + padding);
 
 		shapeX.setRotation(45);
-		window->draw(shapeX);
+		window.draw(shapeX);
 		shapeX.setRotation(-45);
-		window->draw(shapeX);
+		window.draw(shapeX);
 	}
 	else if (this->getCell(index) == Cell::O)
 	{
 		shapeO.setPosition(index % 3 * cellWidth + cellWidth / 2 + padding,
 							index / 3 * cellHeight + cellHeight / 2 + padding);
 
-		window->draw(shapeO);
+		window.draw(shapeO);
 	}
 }
 
 
-void TTTBoard::drawScoreboard(sf::RenderWindow* window) const
+void TTTBoard::drawScoreboard(sf::RenderWindow& window) const
 {
 	sf::RectangleShape seperator(sf::Vector2f(WIDTH-padding*4, 2));
 	
 	seperator.setPosition(padding*2, HEIGHT - 10);
 	seperator.setFillColor(LINE_COLOR);
-	window->draw(seperator);
+	window.draw(seperator);
 
 	auto shapeXScore(shapeX);
 
@@ -62,9 +62,9 @@ void TTTBoard::drawScoreboard(sf::RenderWindow* window) const
 	shapeXScore.setOrigin(shapeXScore.getSize() / static_cast<float>(2));
 	shapeXScore.setPosition(padding * 4 , HEIGHT + SCOREBOARD_HEIGHT - padding - 10);
 	shapeXScore.setRotation(45);
-	window->draw(shapeXScore);
+	window.draw(shapeXScore);
 	shapeXScore.setRotation(-45);
-	window->draw(shapeXScore);
+	window.draw(shapeXScore);
 
 	auto shapeOScore(shapeO);
 
@@ -74,7 +74,7 @@ void TTTBoard::drawScoreboard(sf::RenderWindow* window) const
 	shapeOScore.setOrigin(sf::Vector2f(shapeOScore.getRadius(), shapeOScore.getRadius()));
 
 	shapeOScore.setPosition(padding * 2 + WIDTH/2, HEIGHT + SCOREBOARD_HEIGHT - padding - 10);
-	window->draw(shapeOScore);
+	window.draw(shapeOScore);
 
 	sf::CircleShape dot(6);
 
@@ -83,18 +83,18 @@ void TTTBoard::drawScoreboard(sf::RenderWindow* window) const
 
 	dot.setPosition(shapeXScore.getPosition() + sf::Vector2f(40, -12));
 	dot.setFillColor(X_COLOR);
-	window->draw(dot);
+	window.draw(dot);
 	dot.setPosition(shapeXScore.getPosition() + sf::Vector2f(40, 12));
-	window->draw(dot);
+	window.draw(dot);
 
 	dot.setPosition(shapeOScore.getPosition() + sf::Vector2f(40, -12));
 	dot.setFillColor(O_COLOR);
-	window->draw(dot);
+	window.draw(dot);
 	dot.setPosition(shapeOScore.getPosition() + sf::Vector2f(40, 12));
-	window->draw(dot);
+	window.draw(dot);
 }
 
-void TTTBoard::drawBoard(sf::RenderWindow* window)
+void TTTBoard::drawBoard(sf::RenderWindow& window)
 {
 	for (auto i = 0; i < 9; i++)
 	{
@@ -125,10 +125,10 @@ bool TTTBoard::isBoardFull()
 	return isFull;
 }
 
-void TTTBoard::processMouseInput(sf::Event::MouseButtonEvent* mouseEvent)
+void TTTBoard::processMouseInput(sf::Event::MouseButtonEvent& mouseEvent)
 {
-	auto x = mouseEvent->x;
-	auto y = mouseEvent->y;
+	auto x = mouseEvent.x;
+	auto y = mouseEvent.y;
 
 	if (x < padding || x > windowWidth - padding
 		|| y < padding || y > windowHeight - padding)
