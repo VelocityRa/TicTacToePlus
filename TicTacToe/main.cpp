@@ -1,32 +1,33 @@
-#include <SFML/Graphics.hpp>
 #include "TTTBoard.h"
+#include "Constants.h"
 
-//Window resolution
-const auto WIDTH = 600;
-const auto HEIGHT = 600;
-
-// Color theme from here: https://color.adobe.com/Campfire-color-theme-2528696/
-const auto BG_COLOR = sf::Color(140, 70, 70);
-const auto LINE_COLOR = sf::Color(217, 100, 89);
-
-//Board padding in pixels
-const auto padding = 30;
-
-//Line width for the board lines
-const auto lineWidth = WIDTH / 50;
-
-//Board width
-const auto bWIDTH = WIDTH - padding * 2;
-const auto bHEIGHT = HEIGHT - padding * 2;
+#include <SFML/Graphics.hpp>
 
 static void drawLines(sf::RenderWindow*, sf::RectangleShape* line);
 static void setupWinText(sf::Text* text, sf::Text* shadow);
+
+inline bool updateGOText(sf::Text& gameOverText, TTTBoard& board)
+{
+	auto gamestate = board.getGameState();
+	if (gamestate == TTTBoard::XWon) {
+		gameOverText.setString("X WON");
+	}
+	else if (gamestate == TTTBoard::OWon) {
+		gameOverText.setString("O WON");
+	}
+	else if (gamestate == TTTBoard::Draw) {
+		gameOverText.setString("DRAW");
+	}
+	else
+		return true;
+	return false;
+}
 
 int WinMain()
 {
 	sf::ContextSettings settings;
 	settings.antialiasingLevel = 8;
-	sf::RenderWindow window(sf::VideoMode(WIDTH, HEIGHT), "Tic Tac Toe",
+	sf::RenderWindow window(sf::VideoMode(WIDTH, HEIGHT+SCOREBOARD_HEIGHT), "Tic Tac Toe",
 			 sf::Style::Titlebar | sf::Style::Close, settings);
 	window.setFramerateLimit(60);
 
@@ -40,7 +41,7 @@ int WinMain()
 	auto GOshadow(gameOverText);
 
 	// Create the board
-	TTTBoard board(bWIDTH, bHEIGHT, padding);
+	TTTBoard board(bWIDTH, bHEIGHT);
 
 	//Line(rectangle) shape used for drawing the board
 	sf::RectangleShape line(sf::Vector2f(lineWidth, bHEIGHT));
@@ -63,22 +64,14 @@ int WinMain()
 					{
 						board.processMouseInput(&event.mouseButton);
 					}
-					else
+					else // Clicked at win screen, so start a new game
 					{
 						gameOverText.setString("");
 						GOshadow.setString("");
 						board.resetGame();
+						break;
 					}
-					auto gamestate = board.getGameState();
-					if (gamestate == TTTBoard::XWon) {
-						gameOverText.setString("X WON");
-					}
-					else if (gamestate == TTTBoard::OWon) {
-						gameOverText.setString("O WON");
-					}
-					else if (gamestate == TTTBoard::Draw) {
-						gameOverText.setString("DRAW");
-					}
+					if (updateGOText(gameOverText, board)) break;
 					setupWinText(&gameOverText, &GOshadow);
 				}
 				break;
@@ -89,6 +82,7 @@ int WinMain()
 
 		drawLines(&window, &line); // Draw lines comprising the board
 		board.drawBoard(&window); // Draw X's and O's
+		board.drawScoreboard(&window);
 
 		window.draw(GOshadow);  // Draw game over text's shadow
 		window.draw(gameOverText); // Draw winning text (empty if game is in progress)

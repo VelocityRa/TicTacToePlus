@@ -15,7 +15,6 @@ private:
 	const float item_width = 15;
 	float cellWidth;
 	float cellHeight;
-	int padding;
 	float windowWidth;
 	float windowHeight;
 
@@ -28,11 +27,11 @@ private:
 
 	Cell cells[3][3];
 	Cell currentCell; // Indicates current player
-	sf::RectangleShape shape_X;
-	sf::CircleShape shape_O;
+	sf::RectangleShape shapeX;
+	sf::CircleShape shapeO;
 
 public:
-	TTTBoard(int boardWidth, int boardHeight, int padding);
+	TTTBoard(int boardWidth, int boardHeight);
 	~TTTBoard() {}
 
 	enum GameState
@@ -74,6 +73,7 @@ public:
 	}
 
 	void drawCell(sf::RenderWindow* window, unsigned int index);
+	void drawScoreboard(sf::RenderWindow* window) const;
 	void drawBoard(sf::RenderWindow* window);
 	void clearBoard();
 	bool isBoardFull();
