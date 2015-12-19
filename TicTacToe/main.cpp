@@ -1,8 +1,7 @@
 #include "TTTBoard.h"
-#include "Constants.h"
-
-#include <SFML/Graphics.hpp>
 #include "TTTScoreboard.h"
+#include "Constants.h"
+#include <SFML/Graphics.hpp>
 
 static void drawLines(sf::RenderWindow&, sf::RectangleShape& line);
 static void setupWinText(sf::Text& text, sf::Text& shadow);
@@ -15,7 +14,7 @@ int WinMain()
 	sf::RenderWindow window(sf::VideoMode(WIDTH, HEIGHT+SCOREBOARD_HEIGHT), "Tic Tac Toe",
 			 sf::Style::Titlebar | sf::Style::Close, settings);
 	window.setFramerateLimit(60);
-
+	
 	// Text stuff
 	sf::Font font;
 	if(!font.loadFromFile("../TicTacToe/resources/fonts/ONRAMP.ttf"))
@@ -29,6 +28,10 @@ int WinMain()
 	TTTBoard board(bWIDTH, bHEIGHT);
 	// Create the Scoreboard
 	TTTScoreboard scoreboard(board);
+
+	// Get pointer of this board's scoreboard so that
+	// we can call it's methods/change it
+	board.setScoreboard(&scoreboard);
 
 	//Line(rectangle) shape used for drawing the board
 	sf::RectangleShape line(sf::Vector2f(lineWidth, bHEIGHT));
@@ -116,7 +119,7 @@ static void setupWinText(sf::Text& text, sf::Text& shadow)
 	shadow.setColor(sf::Color::Black);
 }
 
-inline bool updateGOText(sf::Text& gameOverText, TTTBoard& board)
+inline static bool updateGOText(sf::Text& gameOverText, TTTBoard& board)
 {
 	auto gamestate = board.getGameState();
 	if (gamestate == TTTBoard::XWon) {

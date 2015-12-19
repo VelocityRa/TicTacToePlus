@@ -1,8 +1,11 @@
 #pragma once
+#include <SFML/Window/Event.hpp>
 #include <SFML/Graphics/RenderWindow.hpp>
 #include <SFML/Graphics/RectangleShape.hpp>
 #include <SFML/Graphics/CircleShape.hpp>
-#include <SFML/Window/Event.hpp>
+#include "TTTScoreboard.h"
+
+class TTTScoreboard;	//Forward declaration
 
 // Store the cells and handles basic Tic Tac Toe logic
 class TTTBoard
@@ -15,18 +18,13 @@ private:
 	float windowHeight;
 	const float item_width = 15;
 
-	enum class Cell
-	{
-		Empty,
-			X,
-			O
-	};
+	//cells[3][3] and currentCell are defined at the end (we need the Cell enum)
 
-	Cell cells[3][3];
-	Cell currentCell; // Indicates current player
 	sf::RectangleShape shapeX;
 	sf::CircleShape shapeO;
-
+	
+	TTTScoreboard* scoreboard;		// Pointer to the scoreboard associated with this board
+	
 public:
 	TTTBoard(int boardWidth, int boardHeight);
 	~TTTBoard() {}
@@ -38,6 +36,13 @@ public:
 		OWon,
 		Draw
 	} gamestate;
+
+	enum class Cell
+	{
+		Empty,
+		X,
+		O
+	};
 
 	Cell getCell(unsigned int i)
 	{
@@ -83,10 +88,19 @@ public:
 	bool isBoardFull();
 
 	void processMouseInput(sf::Event::MouseButtonEvent& mouseEvent);
-
+	
+	void setScoreboard(TTTScoreboard* scoreboard_)
+	{
+		this->scoreboard = scoreboard_;
+	}
+	
 	void setWinState(unsigned int i, unsigned int j)
 	{
-		gamestate = getCell(i, j) == Cell::X ? XWon : OWon;
+		const auto cell = getCell(i, j);
+		gamestate = cell == Cell::X ? XWon : OWon;
+
+		cell == Cell::X ? scoreboard->addPointX() : 
+						  scoreboard->addPointO();
 	}
 
 	void setDraw()
@@ -102,5 +116,9 @@ public:
 	void nextMove();
 
 	void resetGame();
+
+private:
+	Cell cells[3][3];
+	Cell currentCell; // Indicates current player
 
 };

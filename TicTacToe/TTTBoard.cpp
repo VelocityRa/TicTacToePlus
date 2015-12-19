@@ -108,8 +108,6 @@ void TTTBoard::nextMove()
 	// Switch current player
 	currentCell = currentCell == Cell::X ? Cell::O : Cell::X;
 
-	//TODO: Generalize for n-sized grid
-
 	// Check horizontal
 	for (auto row = 0; row < 3; row++)
 	{
