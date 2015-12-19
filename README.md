@@ -2,7 +2,8 @@
 Tic Tac Toe in C++ using SFML.
 
 ### Current Goals:
-* Basic function
-* Prettify (aiming for a minimalist sleek UI)
-* UI Animations
+* ~~Basic function~~
+* ~~Scoreboard~~
+* ~~Prettify (aiming for a minimalist sleek UI)~~
 * Implement unbeatable AI
+* UI Animations
