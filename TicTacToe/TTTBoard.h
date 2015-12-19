@@ -9,14 +9,11 @@ class TTTBoard
 {
 private:
 
-	const sf::Color X_COLOR = sf::Color(242, 227, 148);
-	const sf::Color O_COLOR = sf::Color(242, 174, 114);
-
-	const float item_width = 15;
 	float cellWidth;
 	float cellHeight;
 	float windowWidth;
 	float windowHeight;
+	const float item_width = 15;
 
 	enum class Cell
 	{
@@ -72,8 +69,15 @@ public:
 		return gamestate;
 	}
 
+	sf::RectangleShape getX() const
+	{
+		return shapeX;
+	}
+	sf::CircleShape getO() const
+	{
+		return shapeO;
+	}
 	void drawCell(sf::RenderWindow& window, unsigned int index);
-	void drawScoreboard(sf::RenderWindow& window) const;
 	void drawBoard(sf::RenderWindow& window);
 	void clearBoard();
 	bool isBoardFull();

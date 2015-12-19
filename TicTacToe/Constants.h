@@ -10,6 +10,9 @@ const auto SCOREBOARD_HEIGHT = 70;
 const auto BG_COLOR = sf::Color(140, 70, 70);
 const auto LINE_COLOR = sf::Color(217, 100, 89);
 
+const sf::Color X_COLOR = sf::Color(242, 227, 148);
+const sf::Color O_COLOR = sf::Color(242, 174, 114);
+
 //Board padding in pixels
 const auto padding = 30;
 

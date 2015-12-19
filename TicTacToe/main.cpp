@@ -2,26 +2,11 @@
 #include "Constants.h"
 
 #include <SFML/Graphics.hpp>
+#include "TTTScoreboard.h"
 
 static void drawLines(sf::RenderWindow&, sf::RectangleShape& line);
 static void setupWinText(sf::Text& text, sf::Text& shadow);
-
-inline bool updateGOText(sf::Text& gameOverText, TTTBoard& board)
-{
-	auto gamestate = board.getGameState();
-	if (gamestate == TTTBoard::XWon) {
-		gameOverText.setString("X WON");
-	}
-	else if (gamestate == TTTBoard::OWon) {
-		gameOverText.setString("O WON");
-	}
-	else if (gamestate == TTTBoard::Draw) {
-		gameOverText.setString("DRAW");
-	}
-	else
-		return true;
-	return false;
-}
+inline bool updateGOText(sf::Text& gameOverText, TTTBoard& board);
 
 int WinMain()
 {
@@ -42,6 +27,8 @@ int WinMain()
 
 	// Create the board
 	TTTBoard board(bWIDTH, bHEIGHT);
+	// Create the Scoreboard
+	TTTScoreboard scoreboard(board);
 
 	//Line(rectangle) shape used for drawing the board
 	sf::RectangleShape line(sf::Vector2f(lineWidth, bHEIGHT));
@@ -82,7 +69,7 @@ int WinMain()
 
 		drawLines(window, line); // Draw lines comprising the board
 		board.drawBoard(window); // Draw X's and O's
-		board.drawScoreboard(window);
+		scoreboard.drawScoreboard(window); //Draw scoreboard (seperator, 
 
 		window.draw(GOshadow);  // Draw game over text's shadow
 		window.draw(gameOverText); // Draw winning text (empty if game is in progress)
@@ -127,4 +114,21 @@ static void setupWinText(sf::Text& text, sf::Text& shadow)
 	shadow = text;
 	shadow.move(10, -10);
 	shadow.setColor(sf::Color::Black);
+}
+
+inline bool updateGOText(sf::Text& gameOverText, TTTBoard& board)
+{
+	auto gamestate = board.getGameState();
+	if (gamestate == TTTBoard::XWon) {
+		gameOverText.setString("X WON");
+	}
+	else if (gamestate == TTTBoard::OWon) {
+		gameOverText.setString("O WON");
+	}
+	else if (gamestate == TTTBoard::Draw) {
+		gameOverText.setString("DRAW");
+	}
+	else
+		return true;
+	return false;
 }

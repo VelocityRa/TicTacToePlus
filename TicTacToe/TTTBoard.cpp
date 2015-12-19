@@ -47,53 +47,6 @@ void TTTBoard::drawCell(sf::RenderWindow& window, unsigned int index)
 	}
 }
 
-
-void TTTBoard::drawScoreboard(sf::RenderWindow& window) const
-{
-	sf::RectangleShape seperator(sf::Vector2f(WIDTH-padding*4, 2));
-	
-	seperator.setPosition(padding*2, HEIGHT - 10);
-	seperator.setFillColor(LINE_COLOR);
-	window.draw(seperator);
-
-	auto shapeXScore(shapeX);
-
-	shapeXScore.setSize(sf::Vector2f(item_width/1.5, SCOREBOARD_HEIGHT));
-	shapeXScore.setOrigin(shapeXScore.getSize() / static_cast<float>(2));
-	shapeXScore.setPosition(padding * 4 , HEIGHT + SCOREBOARD_HEIGHT - padding - 10);
-	shapeXScore.setRotation(45);
-	window.draw(shapeXScore);
-	shapeXScore.setRotation(-45);
-	window.draw(shapeXScore);
-
-	auto shapeOScore(shapeO);
-
-	shapeOScore.setRadius(SCOREBOARD_HEIGHT/4);
-	shapeOScore.setOutlineThickness(item_width/1.2);
-	shapeOScore.setPointCount(32);
-	shapeOScore.setOrigin(sf::Vector2f(shapeOScore.getRadius(), shapeOScore.getRadius()));
-
-	shapeOScore.setPosition(padding * 2 + WIDTH/2, HEIGHT + SCOREBOARD_HEIGHT - padding - 10);
-	window.draw(shapeOScore);
-
-	sf::CircleShape dot(6);
-
-	dot.setPointCount(4);
-	dot.setOrigin(sf::Vector2f(dot.getRadius(), dot.getRadius()));
-
-	dot.setPosition(shapeXScore.getPosition() + sf::Vector2f(40, -12));
-	dot.setFillColor(X_COLOR);
-	window.draw(dot);
-	dot.setPosition(shapeXScore.getPosition() + sf::Vector2f(40, 12));
-	window.draw(dot);
-
-	dot.setPosition(shapeOScore.getPosition() + sf::Vector2f(40, -12));
-	dot.setFillColor(O_COLOR);
-	window.draw(dot);
-	dot.setPosition(shapeOScore.getPosition() + sf::Vector2f(40, 12));
-	window.draw(dot);
-}
-
 void TTTBoard::drawBoard(sf::RenderWindow& window)
 {
 	for (auto i = 0; i < 9; i++)
