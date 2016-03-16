@@ -5,9 +5,13 @@
 
 static void drawLines(sf::RenderWindow&, sf::RectangleShape& line);
 static void setupWinText(sf::Text& text, sf::Text& shadow);
-inline bool updateGOText(sf::Text& gameOverText, TTTBoard& board);
+inline static bool updateGOText(sf::Text& gameOverText, TTTBoard& board);
 
+#ifdef _WIN32
 int WinMain()
+#else
+int main()
+#endif
 {
 	sf::ContextSettings settings;
 	settings.antialiasingLevel = 8;
