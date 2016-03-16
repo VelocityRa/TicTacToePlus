@@ -11,7 +11,7 @@ TTTBoard::TTTBoard(int boardWidth, int boardHeight)
 	this->windowWidth = cellWidth * 3 + padding * 2;
 	this->windowHeight = cellHeight * 3 + padding * 2;
 
-		
+
 	shapeX.setSize(sf::Vector2f(item_width, cellHeight - padding));
 	shapeX.setOrigin(shapeX.getSize() / static_cast<float>(2));
 	shapeX.setFillColor(X_COLOR);
@@ -91,7 +91,8 @@ void TTTBoard::processMouseInput(sf::Event::MouseButtonEvent& mouseEvent)
 	}
 
 	//Input coords include padding so we should subtract it
-	x, y -= padding;
+	x -= padding;
+	y -= padding;
 
 	const unsigned int cellX = x / cellWidth;
 	const unsigned int cellY = y / cellHeight;
